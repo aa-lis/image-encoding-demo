@@ -54,6 +54,7 @@ namespace WpfApplication1
         private bool _isBusy;
         private ImageSource _imageSource;
         private string _imageCaption = "Click on the button to load a random image";
+        private readonly HashSet<string> _validImageExtensions = new HashSet<string>(new[]{ ".jpg", ".png", ".bmp"});
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -100,7 +101,7 @@ namespace WpfApplication1
             {
                 tuple = await GetRandomImageUrl();
             }
-            while (tuple.Item2.Substring(tuple.Item2.LastIndexOf('.')) == ".svg");
+            while (!_validImageExtensions.Contains(tuple.Item2.Substring(tuple.Item2.LastIndexOf('.')), StringComparer.OrdinalIgnoreCase));
 
             using (WebClient webClient = new WebClient())
             {
